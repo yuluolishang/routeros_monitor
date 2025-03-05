@@ -32,7 +32,6 @@ object TimeUtil {
      */
     fun getCurrentTimestampRoundedToSecond(): Long {
         val calendar = Calendar.getInstance()
-        calendar.set(Calendar.MILLISECOND, 0)
         return calendar.timeInMillis
     }
 

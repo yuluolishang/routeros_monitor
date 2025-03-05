@@ -23,9 +23,6 @@ class RouterService {
     private val lastTime = mutableMapOf<String, Long>()
     private val trafficHistory = mutableMapOf<String, MutableList<TrafficEntry>>()
 
-    // 新增的常量
-    private val maxHistoryPoints = 30 // 保存60个数据点
-
     // 新增数据类
     data class TrafficEntry(
         val interval: Long,
@@ -187,26 +184,21 @@ class RouterService {
         } else {
             val lastInterval = lastEntry.interval
             val timeDiff = (currentTime - lastTime) / 1000
-            val currentInterval = try {
-                Math.addExact(lastInterval, timeDiff)
-            } catch (e: ArithmeticException) {
-                // 检测到溢出，重置基准时间和间隔
+            var currentInterval = Math.addExact(lastInterval, timeDiff)
+            // 每2分钟更新一次
+            if(currentInterval>=120){
                 globalBaseTime =  TimeUtil.getCurrentTimestampRoundedToSecond()// 更新为当前时间的整秒
                 history.clear() // 清空历史数据
-                0L // 重置间隔为0
+                currentInterval=0L
             }
+            // 添加新的数据点
             history.add(
                 TrafficEntry(
                     currentInterval,
                     rxRate / 1000,
                     txRate / 1000
                 )
-            ) //加新的数据点
-
-            // 保持最大数据点数量
-            while (history.size > maxHistoryPoints) {
-                history.removeAt(0)
-            }
+            )
         }
     }
 

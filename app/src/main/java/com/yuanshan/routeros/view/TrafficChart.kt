@@ -51,7 +51,7 @@ fun TrafficChart(
     // 使用remember确保在组合期间保持一致的baseTime
     val baseTime = remember { mutableStateOf(RouterService.globalBaseTime) } // 使用全局变量
 
-    // 使用 DisposableEffect 或 LaunchedEffect 来监听变化
+    // 使用 LaunchedEffect 来监听变化
     LaunchedEffect(Unit) {
         // 定期检查并更新 baseTime
         while(true) {

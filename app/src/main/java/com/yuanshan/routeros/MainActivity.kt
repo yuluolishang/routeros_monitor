@@ -110,6 +110,7 @@ fun RouterApp(viewModel: RouterViewModel) {
             ) {
                 RouterDashboard(viewModel)
 
+                // 隐藏设置按钮
                 LaunchedEffect(showSettingsButton) {
                     if (showSettingsButton) {
                         delay(10000) // 10 秒
